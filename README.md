@@ -1,7 +1,6 @@
 ### Arduino Porting For Pico_DM_QD3503728
 
-display is based on TFT_eSPI
-touch
+Display is based on TFT_eSPI
 
 ### TODO
 
