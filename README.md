@@ -56,7 +56,11 @@ touch
 5. The `Arduino` folder should be like this:
 
     ```bash
-    ├── libraries                                                                                                                                                                            │   ├── TFT_eSPI                                                                                                        │   ├── lv_conf.h                                                                                                       │   └── lvgl
+    libraries\
+        lvgl\
+        TFT_eSPI\
+            User_Setup.h
+        lv_conf.h
     ```
 
     > (The `Arduino` folder usually at `C\Users\your_username\Documents\Arduino` on windows or `~/Documents/Arduino` on linux)
