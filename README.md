@@ -1,6 +1,7 @@
 ### Arduino Porting For Pico_DM_QD3503728
 
-Display is based on TFT_eSPI
+- Display is based on TFT_eSPI
+    ![TFT_eSPI](assets/pico_dm_qd3503728_arduino_2.jpeg)
 
 ### TODO
 
@@ -73,3 +74,5 @@ Display is based on TFT_eSPI
     Each time you upload the sketch, select the correct COM port is suggested.
 
 8. Enjoy
+
+    ![lvgl](assets/pico_dm_qd3503728_arduino.jpeg)
