@@ -1,29 +1,30 @@
-### Arduino Porting For Pico_DM_QD3503728
+### Pico_DM_QD3503728 的 Arduino 移植
 
-- Display is based on TFT_eSPI
+[[中文]](README.md)[[English]](README.en.md)
+
+- 显示基于 TFT_eSPI 开发
     ![TFT_eSPI](assets/pico_dm_qd3503728_arduino_2.jpeg)
 
 ### TODO
 
-- [ ] refactor the ft6236u driver, make it support rotation.
-- [ ] How to overclock the pico in arduio? does it effect the other libraries?
-- [x] upload this document to the github page
-- [ ] add chinese translation
+- [ ] 重写FT6236驱动，使其支持旋转
+- [ ] 如何在 Arduino 中超频 RP2040，是否会影响其他库？
+- [ ] 将这篇文档上传到Github Page
 
-### Hardware Prequisites
+### 所需硬件
 
 - Raspberry Pi Pico (with BOOTSEL button)
-- A Type-C USB cable
+- 一根 Type-C USB 或 Micro-USB 线缆
 
-### Before you start
+### 在你开始之前
 
-0. Get this repository via git clone or download the zip file
+0. 通过git或者下载zip来获取本工程
 
     ```bash
     git clone https://github.com/embeddedboys/pico_dm_qd3503728_arduino.git
     ```
 
-1. Install pico board support in Arduino IDE
+1. 在 Arduino IDE 中安装 pico 开发板
 
     > Referenced from [https://github.com/earlephilhower/arduino-pico](https://github.com/earlephilhower/arduino-pico)
 
@@ -43,27 +44,27 @@
 
     ![install](assets/install.png)
 
-2. Install these libraries via arduino library manager
+2. 通过 Arduino IDE 安装 lvgl 和 TFT_eSPI 库
 
     - TFT_eSPI
     - lvgl (version == 8.4.0)
 
-3. Replace the `TFT_eSPI/User_Setup.h` with the one provided by this repository
+3. 将 `TFT_eSPI/User_Setup.h` 替换成本工程中提供的
 
 ```bash
 cd pico_dm_qd3503728_arduino
 cp User_Setup.h ~/Arduino/libraries/TFT_eSPI/
 ```
 
-4. Copy the `lv_conf.h` under the `libraries` directory
+4. 将 `lv_conf.h` 拷贝至 `Arduino/libraries` 目录下
 
 ```bash
 cd pico_dm_qd3503728_arduino
 cp lv_conf.h ~/Arduino/libraries/
 ```
 
-5. If you want to build lvgl demos, you need to copy the `lvgl/demos`
-directory under the `lvgl/src` directory, so did examples.
+5. 如果你想要构建 lvgl 的 demos, 将 `lvgl/demos`
+目录拷贝至 `lvgl/src` 目录下， examples 也一样
 
 ```bash
 cd ~/Arduino/libraries/lvgl
@@ -71,7 +72,7 @@ cp demos/ -r src/
 cp examples -r src/
 ```
 
-Then the `Arduino` folder should be like this:
+这时 `Arduino` 目录看起来是这样的：
 
     ```bash
     libraries\
@@ -81,15 +82,15 @@ Then the `Arduino` folder should be like this:
         lv_conf.h
     ```
 
-> (The `Arduino` folder usually at `C\Users\your_username\Documents\Arduino` on windows or `~/Arduino` on linux by default)
+> (`Arduino`目录在 Windows 上通常默认位于 `C\Users\your_username\Documents\Arduino` , 在 linux 上通常位于`~/Arduino`)
 
-6. In `Arduino IDE`, go to `File->Open` and open `main/main.ino` which in this repository
+6. 在`Arduino IDE`中, 找到 `File->Open` 并且打开本工程中的 `main/main.ino` 文件
 
-7. Upload the sketch to your pico
+7. 上传工程到 Pico
 
-    When the first time you upload the sketch, you need to press the BOOTSEL button on the pico then plug it to your computer. Otherwise, after you modified the sketch, you can just upload it to your pico.
+    当你第一次上传工程时，你需要按下 Pico 的 BOOTSEL 按钮，然后插入你的电脑。此外，在你修改了工程后，你可以直接上传到你的 Pico 上。
 
-    Each time you upload the sketch, select the correct COM port is suggested.
+    每次上传工程时，建议选择正确的 COM 端口。
 
 8. Enjoy
 
