@@ -7,7 +7,7 @@
 
 - [ ] refactor the ft6236u driver, make it support rotation.
 - [ ] How to overclock the pico in arduio? does it effect the other libraries?
-- [ ] upload this document to the github page
+- [x] upload this document to the github page
 - [ ] add chinese translation
 
 ### Hardware Prequisites
@@ -43,17 +43,35 @@
 
     ![install](assets/install.png)
 
-2. Install these libraries via lib manager
+2. Install these libraries via arduino library manager
 
     - TFT_eSPI
-    - lvgl
+    - lvgl (version == 8.4.0)
 
 3. Replace the `TFT_eSPI/User_Setup.h` with the one provided by this repository
 
+```bash
+cd pico_dm_qd3503728_arduino
+cp User_Setup.h ~/Arduino/libraries/TFT_eSPI/
+```
+
 4. Copy the `lv_conf.h` under the `libraries` directory
 
+```bash
+cd pico_dm_qd3503728_arduino
+cp lv_conf.h ~/Arduino/libraries/
+```
 
-5. The `Arduino` folder should be like this:
+5. If you want to build lvgl demos, you need to copy the `lvgl/demos`
+directory under the `lvgl/src` directory, so did examples.
+
+```bash
+cd ~/Arduino/libraries/lvgl
+cp demos/ -r src/
+cp examples -r src/
+```
+
+Then the `Arduino` folder should be like this:
 
     ```bash
     libraries\
@@ -63,9 +81,9 @@
         lv_conf.h
     ```
 
-    > (The `Arduino` folder usually at `C\Users\your_username\Documents\Arduino` on windows or `~/Documents/Arduino` on linux)
+> (The `Arduino` folder usually at `C\Users\your_username\Documents\Arduino` on windows or `~/Arduino` on linux by default)
 
-6. In `Arduino IDE`, go to `File->Open` and open `main.ino` which in this repository
+6. In `Arduino IDE`, go to `File->Open` and open `main/main.ino` which in this repository
 
 7. Upload the sketch to your pico
 
