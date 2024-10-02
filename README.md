@@ -26,23 +26,27 @@
 
 1. 在 Arduino IDE 中安装 pico 开发板
 
-    > Referenced from [https://github.com/earlephilhower/arduino-pico](https://github.com/earlephilhower/arduino-pico)
+    > 参考自 [https://github.com/earlephilhower/arduino-pico](https://github.com/earlephilhower/arduino-pico)
 
-    Open up the Arduino IDE and go to File->Preferences.
+    打开 Arduino IDE 并转到 `文件->首选项`。
 
-    In the dialog that pops up, enter the following URL in the "Additional Boards Manager URLs" field:
+    在弹出的对话框中，在 `其他开发板管理器地址` 字段中输入以下 URL：
 
+    ```bash
     https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
+    ```
 
     ![board url](assets/board_url.png)
 
-    Hit OK to close the dialog.
+    单击 `确定` 关闭对话框。
 
-    Go to Tools->Boards->Board Manager in the IDE
+    在 IDE 中转到 `工具->开发板->开发板管理器`
 
-    Type "pico" in the search box and select "Add":
+    在搜索框中输入`pico`，并选择`安装`：
 
     ![install](assets/install.png)
+
+    等待安装完成
 
 2. 通过 Arduino IDE 安装 lvgl 和 TFT_eSPI 库
 
@@ -51,36 +55,36 @@
 
 3. 将 `TFT_eSPI/User_Setup.h` 替换成本工程中提供的
 
-```bash
-cd pico_dm_qd3503728_arduino
-cp User_Setup.h ~/Arduino/libraries/TFT_eSPI/
-```
+    ```bash
+    cd pico_dm_qd3503728_arduino
+    cp User_Setup.h ~/Arduino/libraries/TFT_eSPI/
+    ```
 
 4. 将 `lv_conf.h` 拷贝至 `Arduino/libraries` 目录下
 
-```bash
-cd pico_dm_qd3503728_arduino
-cp lv_conf.h ~/Arduino/libraries/
-```
+    ```bash
+    cd pico_dm_qd3503728_arduino
+    cp lv_conf.h ~/Arduino/libraries/
+    ```
 
 5. 如果你想要构建 lvgl 的 demos, 将 `lvgl/demos`
 目录拷贝至 `lvgl/src` 目录下， examples 也一样
 
-```bash
-cd ~/Arduino/libraries/lvgl
-cp demos/ -r src/
-cp examples -r src/
-```
+    ```bash
+    cd ~/Arduino/libraries/lvgl
+    cp demos/ -r src/
+    cp examples -r src/
+    ```
 
 这时 `Arduino` 目录看起来是这样的：
 
-    ```bash
-    libraries\
-        lvgl\
-        TFT_eSPI\
-            User_Setup.h
-        lv_conf.h
-    ```
+```bash
+libraries\
+    lvgl\
+    TFT_eSPI\
+        User_Setup.h
+    lv_conf.h
+```
 
 > (`Arduino`目录在 Windows 上通常默认位于 `C\Users\your_username\Documents\Arduino` , 在 linux 上通常位于`~/Arduino`)
 
