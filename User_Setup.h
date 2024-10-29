@@ -251,12 +251,12 @@
 // Example below is for ESP32 Parallel interface with UNO displays
 
 // Tell the library to use 8-bit parallel mode (otherwise SPI is assumed)
-#define TFT_PARALLEL_16_BIT
+#define TFT_PARALLEL_8_BIT
 
 // The ESP32 and TFT the pins used for testing are:
 //#define TFT_CS   29  // Chip select control pin (library pulls permanently low
 #define TFT_DC   20  // Data Command control pin - must use a pin in the range 0-31
-#define TFT_RST  22  // Reset pin, toggles on startup
+#define TFT_RST  18  // Reset pin, toggles on startup
 
 #define TFT_WR    19  // Write strobe control pin - must use a pin in the range 0-31
 //#define TFT_RD    29  // Read strobe control pin

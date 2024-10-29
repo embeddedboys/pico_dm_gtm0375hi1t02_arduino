@@ -4,23 +4,31 @@
 #include <Wire.h>
 #include <demos/lv_demos.h>
 
-#define MY_DISP_HOR_RES 480
-#define MY_DISP_VER_RES 320
+#define MY_DISP_HOR_RES     480
+#define MY_DISP_VER_RES     320
 #define MY_DISP_BUF_SIZE    (MY_DISP_HOR_RES * MY_DISP_VER_RES / 2)
 
 TFT_eSPI tft = TFT_eSPI();
 
-/* FT6236U Spec */
-#define FT6236_ADDR      0x38
-#define FT6236_PIN_SCL   27
-#define FT6236_PIN_SDA   26
-#define FT6236_PIN_RST   18
-/* FT Registers */
-#define FT_REG_TD_STATUS  0x02  // Touch point status
-#define FT_REG_TOUCH1_XH  0x03  // Touch point 1 X high 8-bit
-#define FT_REG_TOUCH1_XL  0x04  // Touch point 1 X low 8-bit
-#define FT_REG_TOUCH1_YH  0x05  // Touch point 1 Y high 8-bit
-#define FT_REG_TOUCH1_YL  0x06  // Touch point 1 Y low 8-bit
+/* NS2009U Spec */
+#define NS2009_ADDR         0x48
+#define NS2009_PIN_SCL      27
+#define NS2009_PIN_SDA      26
+#define NS2009_PIN_IRQ      21
+#define NS2009_CMD_READ_X   0xC0
+#define NS2009_CMD_READ_Y   0xD0
+#define NS2009_DISABLE_IRQ  (1 << 2)
+
+#define NS2009_RTP_X_WIDTH  80
+#define NS2009_RTP_Y_WIDTH  54
+#define NS2009_RTP_X_RES    415
+#define NS2009_RTP_Y_RES    285
+#define NS2009_RTP_X_OFFS   5
+#define NS2009_RTP_Y_OFFS   -20
+
+float rtp_x_sc = (float)((float)MY_DISP_HOR_RES / (float)NS2009_RTP_X_RES);
+float rtp_y_sc = (float)((float)MY_DISP_VER_RES / (float)NS2009_RTP_Y_RES);
+
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
 static uint8_t i2c_read_reg(TwoWire &twi, uint8_t dev_addr, uint8_t reg) {
@@ -36,39 +44,39 @@ static uint8_t i2c_read_reg(TwoWire &twi, uint8_t dev_addr, uint8_t reg) {
     ;
   return twi.read();
 }
-#define read_reg(v) i2c_read_reg(Wire1, FT6236_ADDR, v)
+#define read_reg(v) i2c_read_reg(Wire1, NS2009_ADDR, v)
 
-static bool ft6236_is_pressed(void) {
-  return read_reg(FT_REG_TD_STATUS);
+static bool ns2009_is_pressed(void) {
+  return !digitalRead(NS2009_PIN_IRQ);
 }
 
-static uint16_t ft6236_read_x(void) {
-  uint8_t val_h = read_reg(FT_REG_TOUCH1_YH);
-  uint8_t val_l = read_reg(FT_REG_TOUCH1_YL);
-  uint16_t val = (val_h << 8) | val_l;
-  return val;
+static uint16_t ns2009_read_x(void) {
+  uint8_t val = read_reg(NS2009_CMD_READ_Y);
+  uint16_t this_y = 0;
+
+  this_y = ((val * MY_DISP_VER_RES) / (1 << 8));
+  this_y += NS2009_RTP_Y_OFFS;
+  this_y *= rtp_y_sc;
+
+  return this_y;
 }
 
-static uint16_t ft6236_read_y(void) {
-  uint8_t val_h = read_reg(FT_REG_TOUCH1_XH) & 0x1f; /* the MSB is always high, but it shouldn't */
-  uint8_t val_l = read_reg(FT_REG_TOUCH1_XL);
-  uint16_t val = (val_h << 8) | val_l;
-  return (320 - val);
+static uint16_t ns2009_read_y(void) {
+  uint8_t val = read_reg(NS2009_CMD_READ_X);
+  uint16_t this_x = 0;
+
+  this_x = (MY_DISP_HOR_RES - (val * MY_DISP_HOR_RES) / (1 << 8));
+  this_x += NS2009_RTP_X_OFFS;
+  this_x *= rtp_x_sc;
+
+  return this_x;
 }
 
-static void ft6236_reset(void) {
-  digitalWrite(FT6236_PIN_RST, HIGH);
-  delay(10);
-  digitalWrite(FT6236_PIN_RST, LOW);
-  delay(10);
-  digitalWrite(FT6236_PIN_RST, HIGH);
-}
+static void ns2009_init(void) {
+  pinMode(NS2009_PIN_IRQ, INPUT_PULLUP);
 
-static void ft6236_init(void) {
-  ft6236_reset();
-
-  Wire1.setSDA(FT6236_PIN_SDA);
-  Wire1.setSCL(FT6236_PIN_SCL);
+  Wire1.setSDA(NS2009_PIN_SDA);
+  Wire1.setSCL(NS2009_PIN_SCL);
   Wire1.begin();
 }
 
@@ -82,14 +90,14 @@ static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_colo
 
 static void tp_read(lv_indev_drv_t * indev, lv_indev_data_t * data)
 {
-  if (ft6236_is_pressed()) {
+  if (ns2009_is_pressed()) {
     data->state = LV_INDEV_STATE_PR;
   } else {
     data->state = LV_INDEV_STATE_REL;
   }
 
-  data->point.x = ft6236_read_x();
-  data->point.y = ft6236_read_y();
+  data->point.x = ns2009_read_x();
+  data->point.y = ns2009_read_y();
 }
 
 void setup() {
@@ -114,7 +122,7 @@ void setup() {
   lv_disp_drv_register(&disp_drv);
 
   static lv_indev_drv_t indev_drv;
-  ft6236_init();
+  ns2009_init();
   lv_indev_drv_init(&indev_drv);
   indev_drv.type = LV_INDEV_TYPE_POINTER;
   indev_drv.read_cb = tp_read;

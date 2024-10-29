@@ -3,11 +3,11 @@
 [[中文]](README.md)[[English]](README.en.md)
 
 - 显示基于 TFT_eSPI 开发
-    ![TFT_eSPI](assets/pico_dm_qd3503728_arduino_2.jpeg)
 
 ### TODO
 
-- [ ] 重写FT6236驱动，使其支持旋转
+- [ ] NS2009 驱动
+- [ ] 重写ns2009驱动，使其支持旋转
 - [ ] 如何在 Arduino 中超频 RP2040，是否会影响其他库？
 - [ ] 将这篇文档上传到Github Page
 
@@ -21,7 +21,7 @@
 0. 通过git或者下载zip来获取本工程
 
     ```bash
-    git clone https://github.com/embeddedboys/pico_dm_qd3503728_arduino.git
+    git clone https://github.com/embeddedboys/pico_dm_gtm0375hi1t02_arduino.git
     ```
 
 1. 在 Arduino IDE 中安装 pico 开发板
@@ -97,5 +97,3 @@ libraries\
     每次上传工程时，建议选择正确的 COM 端口。
 
 8. Enjoy
-
-    ![lvgl](assets/pico_dm_qd3503728_arduino.jpeg)
